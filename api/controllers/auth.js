@@ -7,7 +7,7 @@ export const register = (req, res) => {
     console.log("Register endpoint hit");
     console.log("Request Body:", req.body);
 
-    const q = "SELECT * FROM user WHERE email = ? OR username = ?";
+    const q = "SELECT * FROM users WHERE email = ? OR username = ?";
     db.query(q, [req.body.email, req.body.username], (err, data) => {
         if (err) {
             console.error("Error in SELECT query:", err);
@@ -22,7 +22,7 @@ export const register = (req, res) => {
         const hash = bcrypt.hashSync(req.body.password, salt);
         console.log("Hashed Password:", hash);
 
-        const insertQuery = "INSERT INTO user (`username`, `email`, `password`) VALUES (?)";
+        const insertQuery = "INSERT INTO users (`username`, `email`, `password`) VALUES (?)";
         const values = [req.body.username, req.body.email, hash];
 
         db.query(insertQuery, [values], (err, data) => {
@@ -38,7 +38,7 @@ export const register = (req, res) => {
 
 export const login =(req,res)=>{
     //checking user
-  const q = "SELECT * FROM user WHERE username = ?";
+  const q = "SELECT * FROM users WHERE username = ?";
 
   db.query(q, [req.body.username], (err, data) => {
     if (err) return res.status(500).json(err);
